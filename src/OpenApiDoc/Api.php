@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace Timebug\ApiCtl\OpenApiDoc;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Timebug\ApiCtl\Config\ConfigFactory;
+
 class Api
 {
     private string $path;
@@ -97,40 +101,11 @@ class Api
 
     private function addHeaderParam(): void
     {
-        $commonParams = [
-            [
-                "name" => "appid",
-                "in" => "header",
-                "description" => "应用ID",
-                "required" => true,
-                "example" => "{{appid}}",
-                "schema" => ["type" => "string"]
-            ],
-            [
-                "name" => "nonce",
-                "in" => "header",
-                "description" => "随机字符串",
-                "required" => true,
-                "example" => "{{nonce}}",
-                "schema" => ["type" => "string"]
-            ],
-            [
-                "name" => "timestamp",
-                "in" => "header",
-                "description" => "当时时间戳",
-                "required" => true,
-                "example" => "{{timestamp}}",
-                "schema" => ["type" => "integer"]
-            ],
-            [
-                "name" => "signature",
-                "in" => "header",
-                "description" => "请求签名",
-                "required" => true,
-                "example" => "{{signature}}",
-                "schema" => ["type" => "string"]
-            ]
-        ];
+        try {
+            $commonParams = ConfigFactory::getConfig()->getCommonHeaders();
+        } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
+            $commonParams = [];
+        }
         $this->params = array_merge($this->params, $commonParams);
     }
 

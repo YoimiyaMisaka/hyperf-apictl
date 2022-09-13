@@ -46,6 +46,13 @@ class ApiCtlConfig
     private string $swaggerName;
 
     /**
+     *
+     *
+     * @var array
+     */
+    private array $commonHeaders;
+
+    /**
      * 请求响应体路径
      *
      * @var string
@@ -61,6 +68,7 @@ class ApiCtlConfig
         $this->typesPath = $config['type_path'] ?? '';
         $this->apiPath = $config['api_path'] ?? '';
         $this->swaggerName = $config['swagger_name'] ?? '';
+        $this->commonHeaders = $config['api_common_headers'] ?? [];
     }
 
     /**
@@ -119,5 +127,11 @@ class ApiCtlConfig
         return $this->swaggerName;
     }
 
-
+    /**
+     * @return array
+     */
+    public function getCommonHeaders(): array
+    {
+        return $this->commonHeaders;
+    }
 }

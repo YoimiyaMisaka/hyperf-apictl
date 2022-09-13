@@ -52,6 +52,41 @@ return [
         'api_path' => env('APICTL_API_PATH', '/app/Interfaces/Desc'),
         // API文档路径
         'swagger_name' => env('APICTL_SWAAGER_NAME', 'api.swaager.json'),
+        // API文档请求头参数, 没有可不填
+        'api_common_headers' => [
+            [
+                "name" => "appid",
+                "in" => "header",
+                "description" => "应用ID",
+                "required" => true,
+                "example" => "{{appid}}",
+                "schema" => ["type" => "string"]
+            ],
+            [
+                "name" => "nonce",
+                "in" => "header",
+                "description" => "随机字符串",
+                "required" => true,
+                "example" => "{{nonce}}",
+                "schema" => ["type" => "string"]
+            ],
+            [
+                "name" => "timestamp",
+                "in" => "header",
+                "description" => "当时时间戳",
+                "required" => true,
+                "example" => "{{timestamp}}",
+                "schema" => ["type" => "integer"]
+            ],
+            [
+                "name" => "signature",
+                "in" => "header",
+                "description" => "请求签名",
+                "required" => true,
+                "example" => "{{signature}}",
+                "schema" => ["type" => "string"]
+            ]
+        ]
     ],
 ];
 ```
