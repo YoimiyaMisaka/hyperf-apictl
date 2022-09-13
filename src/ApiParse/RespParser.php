@@ -130,11 +130,18 @@ class RespParser
     private function parseParamDoc($doc): array
     {
         $docArray = explode(" ", $doc);
-        return Collection::make($docArray)->reduce(function($carry, $item) {
-            list($k, $v) = explode(':', trim($item, '`'));
-            $carry[$k] = trim($v, '"');
-            return $carry;
-        }, []);
+        try {
+            return Collection::make($docArray)->reduce(function ($carry, $item) {
+                if (!str_contains($item, ':')) {
+                    throw new \Exception("api格式错误");
+                }
+                list($k, $v) = explode(':', trim($item, '`'));
+                $carry[$k] = trim($v, '"');
+                return $carry;
+            }, []);
+        } catch(\Exception $e) {
+            echo "api格式错误, 在 {$doc} 可能包含无效空格或冒号，请检查(desc中使用中文冒号，不允许有空格)。\n";die;
+        }
     }
 
     private function baseType(): array

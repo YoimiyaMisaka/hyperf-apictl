@@ -60,7 +60,6 @@ class ControllerCreator
 
     public function handle(): void
     {
-        return;
         $this->mkDirIfNotExists();
 
         $parserImports = $this->parser->getImports();
