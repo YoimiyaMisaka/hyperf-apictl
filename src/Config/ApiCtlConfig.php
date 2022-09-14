@@ -61,13 +61,13 @@ class ApiCtlConfig
 
     public function __construct(array $config = [])
     {
-        $this->servicePath = $config['service_path'] ?? '';
-        $this->serviceContractPath = $config['service_contract_path'] ?? '';
-        $this->domainPath = $config['domain_path'] ?? '';
-        $this->controllerPath = $config['controller_path'] ?? '';
-        $this->typesPath = $config['type_path'] ?? '';
-        $this->apiPath = $config['api_path'] ?? '';
-        $this->swaggerName = $config['swagger_name'] ?? '';
+        $this->servicePath = rtrim($config['service_path'] ?? '', '/');
+        $this->serviceContractPath = rtrim($config['service_contract_path'] ?? '', '/');
+        $this->domainPath = rtrim($config['domain_path'] ?? '', '/');
+        $this->controllerPath = rtrim($config['controller_path'] ?? '', '/');
+        $this->typesPath = rtrim($config['type_path'] ?? '', '/');
+        $this->apiPath = rtrim($config['api_path'] ?? '', '/');
+        $this->swaggerName = rtrim($config['swagger_name'] ?? '', '/');
         $this->commonHeaders = $config['api_common_headers'] ?? [];
     }
 

@@ -28,7 +28,7 @@ class ServiceParser
         $this->content = $content;
         $this->classNamespace = str_replace('/', '\\', ucfirst(trim($ctlConfig->getServicePath(), '/')));
         $this->className = ucfirst($module) . 'Service';
-        $this->path = BASE_PATH . $ctlConfig->getServicePath();
+        $this->path = BASE_PATH . $ctlConfig->getServicePath() . '/';
         $this->fileName  = $this->path . $this->className . '.php';
         $this->parse();
         return $this;
