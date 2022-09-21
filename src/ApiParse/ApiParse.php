@@ -59,7 +59,7 @@ class ApiParse
         $apiPath = BASE_PATH . $this->ctlConfig->getApiPath() . '/' . $filename;
         $this->apiContent = file_get_contents($apiPath);
         $this->parseServer();
-        $this->template = new Template($filename, $this->module);
+        $this->template = new Template($filename, $this->module, $pool);
     }
 
     public function parseServer(): void
