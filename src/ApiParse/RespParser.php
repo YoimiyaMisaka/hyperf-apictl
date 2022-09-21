@@ -48,6 +48,7 @@ class RespParser
             $routeItem = explode(" ", $route[0]);
 
             $resp = trim(str_replace(['(', ')', "\n"], ['', '', ''], $routeItem[4]));
+            if (!$resp) { continue; }
             $respItems[] = $resp;
             $this->classNames[$resp] = $resp;
             $this->fileNames[$resp]  = $this->path . $resp . '.php';
@@ -60,6 +61,7 @@ class RespParser
         foreach ($respItems as $resp) {
             $pattern = '/' . $resp . " \{([\s\S]+?)\}/";
             preg_match($pattern, $this->content, $matches);
+            if (empty($matches)) { continue; }
             $match = end($matches);
             $params = explode("\n", $match);
 
