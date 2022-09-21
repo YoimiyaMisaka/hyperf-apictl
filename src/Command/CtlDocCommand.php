@@ -4,6 +4,8 @@ namespace Timebug\ApiCtl\Command;
 
 use Hyperf\Command\Annotation\Command;
 use Hyperf\Command\Command as HyperfCommand;
+use Hyperf\Utils\Collection;
+use Symfony\Component\Console\Input\InputOption;
 use Timebug\ApiCtl\ApiParse\ApiParse;
 use Timebug\ApiCtl\Config\ConfigFactory;
 use Timebug\ApiCtl\OpenApiDoc\OpenApi;
@@ -17,13 +19,20 @@ class CtlDocCommand extends HyperfCommand
 
     protected $name = "apictl:doc";
 
+    public function configure()
+    {
+        parent::configure();
+        $this->addOption('pool', 'P', InputOption::VALUE_OPTIONAL, "模块", 'default');
+    }
+
     public function handle()
     {
-        $ctlConfig = ConfigFactory::getConfig();
+        $pool = $this->input->getOption('pool');
+        $ctlConfig = ConfigFactory::getConfig($pool);
         $docPath = BASE_PATH . $ctlConfig->getApiPath();
 
         $apis = scandir($docPath);
-        $apis = array_values(array_filter($apis, fn($item) => !in_array($item, [".", ".."])));
+        $apis = Collection::make($apis)->filter(fn($item) => str_contains($item, '.api'))->all();
 
         $openapi = new OpenApi();
         foreach ($apis as $api) {

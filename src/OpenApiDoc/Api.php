@@ -99,10 +99,10 @@ class Api
         return $this;
     }
 
-    private function addHeaderParam(): void
+    private function addHeaderParam(string $pool = 'default'): void
     {
         try {
-            $commonParams = ConfigFactory::getConfig()->getCommonHeaders();
+            $commonParams = ConfigFactory::getConfig($pool)->getCommonHeaders();
         } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
             $commonParams = [];
         }
@@ -131,9 +131,9 @@ class Api
         return $this;
     }
 
-    public function format(): array
+    public function format(string $pool = 'default'): array
     {
-        $this->addHeaderParam();
+        $this->addHeaderParam($pool);
         $resp = [
             $this->method => [
                 "summary" => $this->summary,

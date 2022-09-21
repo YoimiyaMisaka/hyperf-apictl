@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Timebug\ApiCtl\ApiParse;
 
 use Hyperf\Utils\Collection;
-use Timebug\ApiCtl\Config\ConfigFactory;
+use Timebug\ApiCtl\Config\ApiCtlConfig;
 
 class ReqParser
 {
@@ -25,9 +25,15 @@ class ReqParser
     private array $getterItems;
 
 
+    public function __construct(protected ApiCtlConfig $config)
+    {
+
+    }
+
+
     public function init(string $module, string $content): static
     {
-        $ctlConfig = ConfigFactory::getConfig();
+        $ctlConfig = $this->config;
         $this->content = $content;
         $this->classNamespace = str_replace('/', '\\', ucfirst(ltrim($ctlConfig->getTypesPath(), '/'))) . '\\' . ucfirst($module);
         $this->path = BASE_PATH . $ctlConfig->getTypesPath() . '/' . ucfirst($module) . '/';

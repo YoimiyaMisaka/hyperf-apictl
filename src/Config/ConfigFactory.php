@@ -13,14 +13,15 @@ class ConfigFactory
     /**
      * 获取配置
      *
+     * @param string $pool
      * @return ApiCtlConfig
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public static function getConfig(): ApiCtlConfig
+    public static function getConfig(string $pool = 'default'): ApiCtlConfig
     {
         $config = ApplicationContext::getContainer()->get(ConfigInterface::class);
-        $pool = $config->get("apictl.pool", 'default');
+        !$pool && $pool = $config->get("apictl.pool", 'default');
         $key = sprintf("apictl.%s", $pool);
         $ctlConfig = $config->get($key, []);
         return new ApiCtlConfig($ctlConfig);
@@ -29,39 +30,42 @@ class ConfigFactory
     /**
      * 获取控制器命名空间
      *
+     * @param string $pool
      * @return string
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public static function getControllerNamespace(): string
+    public static function getControllerNamespace(string $pool = 'default'): string
     {
-        $config = self::getConfig();
+        $config = self::getConfig($pool);
         return Helper::getNamespaceByPath($config->getControllerPath());
     }
 
     /**
      * 获取应用服务接口命名空间
      *
+     * @param string $pool
      * @return string
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public static function getServiceContractNamespace(): string
+    public static function getServiceContractNamespace(string $pool = 'default'): string
     {
-        $config = self::getConfig();
+        $config = self::getConfig($pool);
         return Helper::getNamespaceByPath($config->getServiceContractPath());
     }
 
     /**
      * 获取应用服务命名空间
      *
+     * @param string $pool
      * @return string
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public static function getServiceNamespace(): string
+    public static function getServiceNamespace(string $pool = 'default'): string
     {
-        $config = self::getConfig();
+        $config = self::getConfig($pool);
         return Helper::getNamespaceByPath($config->getServicePath());
     }
 
@@ -69,13 +73,14 @@ class ConfigFactory
      * 获取领域服务命名空间
      *
      * @param string $module 领域模块
+     * @param string $pool
      * @return string
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public static function getDomainServiceNamespace(string $module): string
+    public static function getDomainServiceNamespace(string $module, string $pool = 'default'): string
     {
-        $config = self::getConfig();
+        $config = self::getConfig($pool);
         return Helper::getNamespaceByPath(ltrim($config->getDomainPath(), '/') . '/' . ucfirst($module) . '/Service');
     }
 
@@ -83,13 +88,14 @@ class ConfigFactory
      * 获取请求体和响应体的命名空间
      *
      * @param string $module
+     * @param string $pool
      * @return string
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public static function getTypesNamespace(string $module): string
+    public static function getTypesNamespace(string $module, string $pool = 'default'): string
     {
-        $config = self::getConfig();
+        $config = self::getConfig($pool);
         return Helper::getNamespaceByPath(ltrim($config->getTypesPath(), '/') . '/' . ucfirst($module));
     }
 }

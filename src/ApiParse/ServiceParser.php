@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Timebug\ApiCtl\ApiParse;
 
-use Timebug\ApiCtl\Config\ConfigFactory;
+use Timebug\ApiCtl\Config\ApiCtlConfig;
 
 class ServiceParser
 {
@@ -22,9 +22,15 @@ class ServiceParser
     private array $methods;
 
 
+    public function __construct(protected ApiCtlConfig $config)
+    {
+
+    }
+
+
     public function init(string $module, string $content): static
     {
-        $ctlConfig = ConfigFactory::getConfig();
+        $ctlConfig = $this->config;
         $this->content = $content;
         $this->classNamespace = str_replace('/', '\\', ucfirst(trim($ctlConfig->getServicePath(), '/')));
         $this->className = ucfirst($module) . 'Service';

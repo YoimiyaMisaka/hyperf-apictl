@@ -19,12 +19,14 @@ class CtlApiCommand extends HyperfCommand
     {
         parent::configure();
         $this->addOption('api', 'A', InputOption::VALUE_REQUIRED, "api文件名");
+        $this->addOption('pool', 'P', InputOption::VALUE_OPTIONAL, "模块", 'default');
     }
 
     public function handle()
     {
         $apiName = $this->input->getOption('api');
-        $apiParse = new ApiParse($apiName);
+        $pool = $this->input->getOption('pool');
+        $apiParse = new ApiParse($apiName, $pool);
         $apiParse->parse();
     }
 }

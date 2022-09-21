@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Timebug\ApiCtl\ApiParse;
 
-use Timebug\ApiCtl\Config\ConfigFactory;
+use Timebug\ApiCtl\Config\ApiCtlConfig;
 
 class DomainServiceParser
 {
@@ -20,9 +20,15 @@ class DomainServiceParser
     private array $imports;
 
 
+    public function __construct(protected ApiCtlConfig $config)
+    {
+
+    }
+
+
     public function init(string $module, string $content): static
     {
-        $ctlConfig = ConfigFactory::getConfig();
+        $ctlConfig = $this->config;
         $this->content = $content;
         $this->classNamespace = str_replace('/', '\\', ucfirst(ltrim($ctlConfig->getDomainPath(), '/')))  . '\\'. ucfirst($module) . '\\Service';
         $this->path = BASE_PATH . $ctlConfig->getDomainPath() . '/' . ucfirst($module) . '/Service/';

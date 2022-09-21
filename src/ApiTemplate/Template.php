@@ -14,6 +14,8 @@ class Template
 
     private string $module;
 
+    private string $pool;
+
     const SERVICE_INTERFACE_DOC = '// service interface autoload libraries';
 
     const SERVICE_DOC = '// service autoload libraries';
@@ -22,10 +24,11 @@ class Template
 
     const RESPONSE_PROPERTY_DEFINE = '/* response property define */';
 
-    public function __construct(string $apiName, string $module)
+    public function __construct(string $apiName, string $module, string $pool = 'default')
     {
         $this->apiName = $apiName;
         $this->module  = $module;
+        $this->pool    = $pool;
     }
 
     public function getModule(): string
@@ -40,9 +43,9 @@ class Template
     public function controllerTemplate(): string
     {
 
-        $contractNamespace = ConfigFactory::getServiceContractNamespace();
+        $contractNamespace = ConfigFactory::getServiceContractNamespace($this->pool);
         $serviceInterface = $this->module . "ServiceInterface";
-        $controllerNamespace = ConfigFactory::getControllerNamespace();
+        $controllerNamespace = ConfigFactory::getControllerNamespace($this->pool);
         return <<<EOF
 <?php
 declare(strict_types=1);
@@ -76,7 +79,7 @@ EOF;
 
     public function serviceInterfaceTemplate(): string
     {
-        $contractNamespace = ConfigFactory::getServiceContractNamespace();
+        $contractNamespace = ConfigFactory::getServiceContractNamespace($this->pool);
         $serviceInterface = $this->module . "ServiceInterface";
         $doc = self::SERVICE_INTERFACE_DOC;
         return <<<EOF
@@ -99,8 +102,8 @@ EOF;
 
     public function serviceTemplate(): string
     {
-        $contractNamespace = ConfigFactory::getServiceContractNamespace();
-        $serviceNamespace = ConfigFactory::getServiceNamespace();
+        $contractNamespace = ConfigFactory::getServiceContractNamespace($this->pool);
+        $serviceNamespace = ConfigFactory::getServiceNamespace($this->pool);
         $serviceInterface = $this->module . "ServiceInterface";
         $service = $this->module . "Service";
         $doc = self::SERVICE_DOC;
@@ -127,7 +130,7 @@ EOF;
 
     public function domainServiceTemplate(): string
     {
-        $domainNamespace = ConfigFactory::getDomainServiceNamespace($this->module);
+        $domainNamespace = ConfigFactory::getDomainServiceNamespace($this->module, $this->pool);
         return <<<EOF
 <?php
 declare(strict_types=1);
@@ -152,7 +155,7 @@ EOF;
 
     public function typesReqTemplate(): string
     {
-        $typesNamespace = ConfigFactory::getTypesNamespace($this->module);
+        $typesNamespace = ConfigFactory::getTypesNamespace($this->module, $this->pool);
         $doc = self::REQUEST_PROPERTY_DEFINE;
         return <<<EOF
 <?php
@@ -179,7 +182,7 @@ EOF;
 
     public function typesRespTemplate(): string
     {
-        $typesNamespace = ConfigFactory::getTypesNamespace($this->module);
+        $typesNamespace = ConfigFactory::getTypesNamespace($this->module, $this->pool);
         $doc = self::RESPONSE_PROPERTY_DEFINE;
         return <<<EOF
 <?php

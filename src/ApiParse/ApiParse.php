@@ -47,9 +47,15 @@ class ApiParse
      */
     private Template $template;
 
-    public function __construct(string $filename)
+    /**
+     * @var string
+     */
+    private string $pool;
+
+    public function __construct(string $filename, string $pool = 'default')
     {
-        $this->ctlConfig = ConfigFactory::getConfig();
+        $this->pool = $pool;
+        $this->ctlConfig = ConfigFactory::getConfig($pool);
         $apiPath = BASE_PATH . $this->ctlConfig->getApiPath() . '/' . $filename;
         $this->apiContent = file_get_contents($apiPath);
         $this->parseServer();
@@ -79,12 +85,12 @@ class ApiParse
     public function parse(): void
     {
         $this->parseServer();
-        $controllerParser = (new ControllerParser())->init($this->module, $this->apiContent);
-        $domainParser = (new DomainServiceParser())->init($this->module, $this->apiContent);
-        $reqParser = (new ReqParser())->init($this->module, $this->apiContent);
-        $respParser = (new RespParser())->init($this->module, $this->apiContent);
-        $facadeParser = (new ServiceInterfaceParser())->init($this->module, $this->apiContent);
-        $svcParser = (new ServiceParser())->init($this->module, $this->apiContent);
+        $controllerParser = (new ControllerParser($this->ctlConfig))->init($this->module, $this->apiContent);
+        $domainParser = (new DomainServiceParser($this->ctlConfig))->init($this->module, $this->apiContent);
+        $reqParser = (new ReqParser($this->ctlConfig))->init($this->module, $this->apiContent);
+        $respParser = (new RespParser($this->ctlConfig))->init($this->module, $this->apiContent);
+        $facadeParser = (new ServiceInterfaceParser($this->ctlConfig))->init($this->module, $this->apiContent);
+        $svcParser = (new ServiceParser($this->ctlConfig))->init($this->module, $this->apiContent);
 
         (new ControllerCreator($controllerParser))->setReqParser($reqParser)->setRespParser($respParser)->setTemplate($this->template->controllerTemplate())->setPrefix($this->prefix)->handle();
         (new DomainServiceCreator($domainParser))->setTemplate($this->template->domainServiceTemplate())->setReqParser($reqParser)->handle();
@@ -97,9 +103,9 @@ class ApiParse
     public function parseDoc(): array
     {
         $this->parseServer();
-        $controllerParser = (new ControllerParser())->init($this->module, $this->apiContent);
-        $reqParser = (new ReqParser())->init($this->module, $this->apiContent);
-        $respParser = (new RespParser())->init($this->module, $this->apiContent);
+        $controllerParser = (new ControllerParser($this->ctlConfig))->init($this->module, $this->apiContent);
+        $reqParser = (new ReqParser($this->ctlConfig))->init($this->module, $this->apiContent);
+        $respParser = (new RespParser($this->ctlConfig))->init($this->module, $this->apiContent);
 
         $apiReqProps = $reqParser->getApiProps();
         $apiRespProps = $respParser->getApiProps();
@@ -121,7 +127,7 @@ class ApiParse
                 $api->addParam($reqProp["propName"], $reqProp["type"], $reqProp["required"], $reqProp["desc"], $reqProp["default"]);
             }
 
-            $resp[$path]["api"] = $api->format();
+            $resp[$path]["api"] = $api->format($this->pool);
 
             $respProps = $apiRespProps[$item["resp"]];
             $schema = $this->parseApiResp($apiRespProps, $respProps);
