@@ -36,7 +36,7 @@ class CtlDocCommand extends HyperfCommand
 
         $openapi = new OpenApi();
         foreach ($apis as $api) {
-            $parse = new ApiParse($api);
+            $parse = new ApiParse($api, $pool);
             $paths = $parse->parseDoc();
             foreach ($paths as $path => $item) {
                 $openapi->addPath($path, $item["api"]);

@@ -96,11 +96,32 @@ class BaseRequest extends FormRequest
 
     public function all(): array
     {
+        return $this->initPropertyValue();
+    }
+
+    /**
+     * 初始化请求属性
+     *
+     * @return array
+     */
+    private function initPropertyValue(): array
+    {
+        $ref = new ReflectionClass($this);
         $validated = parent::all();
         foreach ($validated as $prop => $value) {
             if (!isset($this->propMap[$prop])) continue;
             $propName = $this->propMap[$prop];
-            property_exists($this, $propName) && $this->{$propName} = $value;
+            if (!$ref->hasProperty($propName)) continue;
+            $property = $ref->getProperty($propName);
+            $property->setAccessible(true);
+
+            switch ($property->getType()) {
+                case 'int': $property->setValue($this, (int)$value); break;
+                case 'string': $property->setValue($this, (string)$value); break;
+                case 'float': $property->setValue($this, (float)$value); break;
+                case 'array': $property->setValue($this, (array)$value); break;
+                default: $property->setValue($this, $value);
+            }
         }
         return $validated;
     }
