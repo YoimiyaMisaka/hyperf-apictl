@@ -65,6 +65,7 @@ class ReqParser
             $match = end($matches);
             $params = explode("\n", $match);
 
+            $this->apiProps[$req] = [];
             foreach ($params as $param) {
                 if (trim($param) == "") continue;
                 $paramItems = explode(" ", $param);
