@@ -71,13 +71,13 @@ class BaseRequest extends FormRequest
                     $attribute = $reqMapperAttrs[0];
                     $attrArgs = $attribute->getArguments();
                     $prop = $attrArgs['json'];
+                    $this->attributeProps[] = $property->getName();
                 }
 
                 if (!$property->getAttributes(Validator::class)) {
                     $this->propMap[$prop] = $property->getName();
                     continue;
                 }
-                $this->attributeProps[] = $property->getName();
 
                 foreach ($property->getAttributes() as $attribute) {
                     if ($attribute->getName() == Validator::class) {
