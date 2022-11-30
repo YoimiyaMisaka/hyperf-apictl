@@ -28,6 +28,11 @@ class BaseRequest extends FormRequest
      */
     protected array $propMap = [];
 
+    /**
+     * @var array
+     */
+    protected array $attributeProps = [];
+
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
@@ -72,6 +77,7 @@ class BaseRequest extends FormRequest
                     $this->propMap[$prop] = $property->getName();
                     continue;
                 }
+                $this->attributeProps[] = $property->getName();
 
                 foreach ($property->getAttributes() as $attribute) {
                     if ($attribute->getName() == Validator::class) {
@@ -108,13 +114,18 @@ class BaseRequest extends FormRequest
     {
         $ref = new ReflectionClass($this);
         $validated = parent::all();
-        foreach ($validated as $prop => $value) {
-            if (!isset($this->propMap[$prop])) continue;
-            $propName = $this->propMap[$prop];
-            if (!$ref->hasProperty($propName)) continue;
-            $property = $ref->getProperty($propName);
-            $property->setAccessible(true);
+        foreach ($ref->getProperties() as $property) {
+            if (!in_array($property->getName(), $this->attributeProps)) {
+                continue;
+            }
 
+            $property->setAccessible(true);
+            $prop = array_search($property->getName(), $this->propMap);
+            if (!$prop) {
+                $property->setValue($this, null);
+                continue;
+            }
+            $value = $validated[$prop] ?? null;
             switch ($property->getType()) {
                 case 'int': $property->setValue($this, (int)$value); break;
                 case 'string': $property->setValue($this, (string)$value); break;
