@@ -55,6 +55,9 @@ class ReqParser
 
             $req  = trim(str_replace(['(', ')', "\n"], ['', '', ''], $routeItem[2]));
             $reqItems[] = $req;
+            $this->getterItems[$req] = [];
+            $this->apiProps[$req] = [];
+            $this->props[$req] = [];
             $this->classNames[$req] = $req;
             $this->fileNames[$req]  = $this->path . $req . '.php';
         }

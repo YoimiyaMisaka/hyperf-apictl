@@ -56,6 +56,9 @@ class RespParser
             $resp = trim(str_replace(['(', ')', "\n"], ['', '', ''], $routeItem[4]));
             if (!$resp) { continue; }
             $respItems[] = $resp;
+            $this->props[$resp] = [];
+            $this->setterItems[$resp] = [];
+            $this->apiProps[$resp] = [];
             $this->classNames[$resp] = $resp;
             $this->fileNames[$resp]  = $this->path . $resp . '.php';
         }
