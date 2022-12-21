@@ -80,7 +80,9 @@ class ReqParser
                 $type = $this->typeChange($type);
 
                 if (str_contains($typeName, "[]")) {
-                    $typeName = ltrim($paramItems[1], "[]") . '[]|array';
+                    $tmpType = ltrim($paramItems[1], "[]");
+                    $typSuffix = str_contains($typeName, "[][]") ?  '[][]|array' :  '[]|array';
+                    $typeName = $this->typeChange($tmpType) . $typSuffix;
                 }
                 preg_match('/.*`(.*)`/', $param, $docText);
                 $paramsDoc = $this->parseParamDoc($docText[1]);
@@ -109,7 +111,7 @@ class ReqParser
                 $this->props[$req][$propName] = "
     /**
      * $desc
-     * @var $type
+     * @var $typeName
      */
     $rule
     $reqMapper
@@ -120,7 +122,7 @@ class ReqParser
                 $this->getterItems[$req][$propName] = "
                 
     /**
-     * @param $type \$$propName
+     * @param $typeName \$$propName
      * @return static
      */
      public function $setterMethod($type \$$propName): static
@@ -130,8 +132,8 @@ class ReqParser
      }
                  
     /**
-     * @param ?$type \$default
-     * @return ?$type
+     * @param ?$typeName \$default
+     * @return ?$typeName
      */
      public function $getterMethod($paramDefault): ?$type
      {

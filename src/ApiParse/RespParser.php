@@ -119,7 +119,7 @@ class RespParser
                 $getterMethod = 'get' . ucfirst($propName);
                 $this->setterItems[$resp][$propName] = "
      /**
-      * @param $type \$$propName
+      * @param $varName \$$propName
       * @return static
       */
      public function $setterMethod($type \$$propName): static
@@ -129,7 +129,7 @@ class RespParser
      }
      
      /**
-      * @return ?$type
+      * @return $varName|null
       */
      public function $getterMethod(): ?$type
      {
