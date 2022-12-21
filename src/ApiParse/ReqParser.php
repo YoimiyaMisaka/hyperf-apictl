@@ -109,14 +109,26 @@ class ReqParser
                 $this->props[$req][$propName] = "
     /**
      * $desc
-     * @var $typeName
+     * @var $type
      */
     $rule
     $reqMapper
     protected $type \${$propName}{$propDefault};";
 
+                $setterMethod = 'set' . ucfirst($propName);
                 $getterMethod = 'get' . ucfirst($propName);
                 $this->getterItems[$req][$propName] = "
+                
+    /**
+     * @param $type \$$propName
+     * @return static
+     */
+     public function $setterMethod($type \$$propName): static
+     {
+         \$this->$propName = \$$propName;
+         return \$this;
+     }
+                 
     /**
      * @param ?$type \$default
      * @return ?$type

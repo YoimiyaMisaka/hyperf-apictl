@@ -101,8 +101,10 @@ class RespParser
                     } else {
                         $typeName = $paramItems[1];
                     }
-                    $typeText = ", type: $typeName::class";
-                    $this->parseRespItems([$typeName]);
+                    if (!in_array($typeName, $this->baseType())) {
+                        $typeText = ", type: $typeName::class";
+                        $this->parseRespItems([$typeName]);
+                    }
                 }
                 $type = $this->typeChange($type);
 
@@ -114,15 +116,24 @@ class RespParser
     protected $type \${$propName};
 ";
                 $setterMethod = 'set' . ucfirst($propName);
+                $getterMethod = 'get' . ucfirst($propName);
                 $this->setterItems[$resp][$propName] = "
-    /**
-     * @param $type \$$propName
-     * @return static
-     */
+     /**
+      * @param $type \$$propName
+      * @return static
+      */
      public function $setterMethod($type \$$propName): static
      {
          \$this->$propName = \$$propName;
          return \$this;
+     }
+     
+     /**
+      * @return ?$type
+      */
+     public function $getterMethod(): ?$type
+     {
+         return \$this->{$propName};
      }
 ";
 
