@@ -89,7 +89,7 @@ class RespParser
                 $typeName = '';
                 if (str_contains($varName, "[]")) {
                     $typeName = ltrim($varName, "[]");
-                    $varName = $typeName . '[]|array';
+                    $varName = $typeName . (str_contains($varName, "[][]") ? '[][]|array' : '[]|array');
                 }
 
                 $type = $paramItems[1];
