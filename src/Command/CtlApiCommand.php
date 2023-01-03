@@ -13,7 +13,7 @@ use Timebug\ApiCtl\ApiParse\ApiParse;
 class CtlApiCommand extends HyperfCommand
 {
 
-    protected $name = "apictl:api";
+    protected ?string $name = "apictl:api";
 
     public function configure()
     {

@@ -17,7 +17,7 @@ use Timebug\ApiCtl\OpenApiDoc\OpenApi;
 class CtlDocCommand extends HyperfCommand
 {
 
-    protected $name = "apictl:doc";
+    protected ?string $name = "apictl:doc";
 
     public function configure()
     {
