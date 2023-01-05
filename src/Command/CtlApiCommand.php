@@ -10,6 +10,7 @@ use Timebug\ApiCtl\ApiParse\ApiParse;
 /**
  * @Command()
  */
+#[Command]
 class CtlApiCommand extends HyperfCommand
 {
 
