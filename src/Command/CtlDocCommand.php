@@ -19,6 +19,8 @@ class CtlDocCommand extends HyperfCommand
 
     protected ?string $name = "apictl:doc";
 
+    protected string $description = "根据API文档生成Swagger文件";
+
     public function configure()
     {
         parent::configure();

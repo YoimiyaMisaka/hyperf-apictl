@@ -16,6 +16,8 @@ class CtlApiCommand extends HyperfCommand
 
     protected ?string $name = "apictl:api";
 
+    protected string $description = "根据API文档生成代码";
+
     public function configure()
     {
         parent::configure();
