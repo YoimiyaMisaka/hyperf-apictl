@@ -111,7 +111,7 @@ class ApiParse
             }
             if (str_contains($item, "title:")) {
                 $this->moduleName = trim(str_replace("title:", "", $item));
-                $this->moduleName = str_replace("接口", "", $this->moduleName);
+                $this->moduleName = trim(str_replace("接口", "", $this->moduleName), '"');
                 break;
             }
         }
@@ -168,7 +168,7 @@ class ApiParse
             $respProps = $apiRespProps[$item["resp"]];
             $schema = $this->parseApiResp($apiRespProps, $respProps);
             $schema->setName($schemaName)
-                ->setFolder($this->module);
+                ->setFolder($this->moduleName);
             $resp[$path]["tag"] = $this->module;
             $resp[$path]["schemaName"] = $this->module . $item["resp"];
             $resp[$path]["schema"] = $schema->format();
