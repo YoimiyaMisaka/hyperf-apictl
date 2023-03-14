@@ -103,10 +103,10 @@ class RespParser
                     } else {
                         $typeName = $paramItems[1];
                     }
-                    if (!in_array($typeName, $this->baseType())) {
+                    if (!in_array($typeName, $this->baseType()) && !in_array($typeName, $this->typeNameMap)) {
                         $typeText = ", type: $typeName::class";
-                        in_array($typeName, $this->typeNameMap) || $this->parseRespItems([$typeName]);
                         $this->typeNameMap[$typeName] = $typeName;
+                        $this->parseRespItems([$typeName]);
                     }
                 }
                 $type = $this->typeChange($type);
