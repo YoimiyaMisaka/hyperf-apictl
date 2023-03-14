@@ -17,7 +17,9 @@ use Timebug\ApiCtl\OpenApiDoc\OpenApi;
 class CtlDocCommand extends HyperfCommand
 {
 
-    protected $name = "apictl:doc";
+    protected ?string $name = "apictl:doc";
+
+    protected string $description = "根据API文档生成Swagger文件";
 
     public function configure()
     {

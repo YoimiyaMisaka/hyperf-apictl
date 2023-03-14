@@ -24,6 +24,8 @@ class RespParser
 
     private array $setterItems;
 
+    private array $typeNameMap = [];
+
 
     public function __construct(protected ApiCtlConfig $config)
     {
@@ -101,8 +103,9 @@ class RespParser
                     } else {
                         $typeName = $paramItems[1];
                     }
-                    if (!in_array($typeName, $this->baseType())) {
+                    if (!in_array($typeName, $this->baseType()) && !in_array($typeName, $this->typeNameMap)) {
                         $typeText = ", type: $typeName::class";
+                        $this->typeNameMap[$typeName] = $typeName;
                         $this->parseRespItems([$typeName]);
                     }
                 }

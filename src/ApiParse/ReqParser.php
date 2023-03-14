@@ -117,28 +117,40 @@ class ReqParser
     $reqMapper
     protected $type \${$propName}{$propDefault};";
 
+                $existsMethod = 'exists' . ucfirst($propName);
                 $setterMethod = 'set' . ucfirst($propName);
                 $getterMethod = 'get' . ucfirst($propName);
                 $this->getterItems[$req][$propName] = "
                 
     /**
+     * @return bool
+     */
+    public function $existsMethod(): bool
+    {
+        return \$this->has('$json');
+    }
+                
+    /**
      * @param $typeName \$$propName
      * @return static
      */
-     public function $setterMethod($type \$$propName): static
-     {
-         \$this->$propName = \$$propName;
-         return \$this;
-     }
+    public function $setterMethod($type \$$propName): static
+    {
+        \$this->$propName = \$$propName;
+        return \$this;
+    }
                  
     /**
      * @param ?$typeName \$default
      * @return ?$typeName
      */
-     public function $getterMethod($paramDefault): ?$type
-     {
-         return \$this->{$propName} ?? \$default;
-     }
+    public function $getterMethod($paramDefault): ?$type
+    {
+        if (\$this->{$existsMethod}() === false) {
+            return \$default;
+        }
+        return \$this->{$propName} ?? \$default;
+    }
 ";
 
                 $this->apiProps[$req][$propName] = [

@@ -38,6 +38,13 @@ class ApiParse
      */
     private string $module;
 
+    /**
+     * 模块名
+     *
+     * @var string
+     */
+    private string $moduleName = '';
+
     private ApiCtlConfig $ctlConfig;
 
     /**
@@ -59,9 +66,15 @@ class ApiParse
         $apiPath = BASE_PATH . $this->ctlConfig->getApiPath() . '/' . $filename;
         $this->apiContent = file_get_contents($apiPath);
         $this->parseServer();
+        $this->parseInfo();
         $this->template = new Template($filename, $this->module, $pool);
     }
 
+    /**
+     * 解析Server
+     *
+     * @return void
+     */
     public function parseServer(): void
     {
         preg_match('/@server\s*\(([^)]+)/', $this->apiContent, $matches);
@@ -80,6 +93,29 @@ class ApiParse
                 $this->module = ucfirst(trim(str_replace("group:", "", $item)));
             }
         }
+    }
+
+    /**
+     * 解析Info
+     *
+     * @return void
+     */
+    public function parseInfo(): void
+    {
+        preg_match('/info\s*\(([^)]+)/', $this->apiContent, $matches);
+        $match = end($matches);
+        $array = explode("\n", $match);
+        foreach ($array as $item) {
+            if (trim($item) == "") {
+                continue;
+            }
+            if (str_contains($item, "title:")) {
+                $this->moduleName = trim(str_replace("title:", "", $item));
+                $this->moduleName = trim(str_replace("接口", "", $this->moduleName), '"');
+                break;
+            }
+        }
+        if ($this->moduleName == '') $this->moduleName = $this->module;
     }
 
     public function parse(): void
@@ -118,7 +154,7 @@ class ApiParse
             $api->setPath($path)
                 ->setSummary($item["doc"])
                 ->setTag($this->module)
-                ->setFolder($this->module)
+                ->setFolder($this->moduleName)
                 ->setMethod($item['method'])
                 ->setRef($schemaName);
 
@@ -132,7 +168,7 @@ class ApiParse
             $respProps = $apiRespProps[$item["resp"]];
             $schema = $this->parseApiResp($apiRespProps, $respProps);
             $schema->setName($schemaName)
-                ->setFolder($this->module);
+                ->setFolder($this->moduleName);
             $resp[$path]["tag"] = $this->module;
             $resp[$path]["schemaName"] = $this->module . $item["resp"];
             $resp[$path]["schema"] = $schema->format();
