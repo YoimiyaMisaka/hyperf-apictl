@@ -13,9 +13,9 @@ use Timebug\ApiCtl\ApiParse\ApiParse;
 class CtlApiCommand extends HyperfCommand
 {
 
-    protected ?string $name = "apictl:api";
+    protected  $name = "apictl:api";
 
-    protected string $description = "根据API文档生成代码";
+    protected $description = "根据API文档生成代码";
 
     public function configure()
     {
