@@ -45,6 +45,8 @@ class ApiParse
      */
     private string $moduleName = '';
 
+    private array $typeMap = [];
+
     private ApiCtlConfig $ctlConfig;
 
     /**
@@ -181,6 +183,8 @@ class ApiParse
         $schema = new Schemas();
         foreach ($respProps as $prop) {
             if (isset($apiRespProps[$prop["typeName"]])) {
+                if (isset($this->typeMap[$prop['typeName']])) continue;
+                $this->typeMap[$prop['typeName']] = $prop['typeName'];
                 $subSchema = $this->parseApiResp($apiRespProps, $apiRespProps[$prop["typeName"]]);
                 $type = $prop["type"] == "array" ? "array" : "object";
                 match ($type) {
