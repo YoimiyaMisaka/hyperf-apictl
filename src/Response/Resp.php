@@ -20,7 +20,7 @@ class Resp
     {
         $resp = [
             'status'  => 0,
-            'code'    => "200",
+            'code'    => 200,
             "data"    => $data,
             "message" => "success",
         ];
@@ -35,10 +35,10 @@ class Resp
      *
      * @param ResponseInterface $response
      * @param string $message
-     * @param string $code
+     * @param int $code
      * @return Psr7ResponseInterface
      */
-    public static function error(ResponseInterface $response, string $message = "", string $code = '400'): Psr7ResponseInterface
+    public static function error(ResponseInterface $response, string $message = "", int $code = 400): Psr7ResponseInterface
     {
         $resp = [
             'status'   => -1,
