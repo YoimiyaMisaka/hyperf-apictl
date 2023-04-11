@@ -143,6 +143,6 @@ class BaseRequest extends FormRequest
      */
     public function parse(): array
     {
-        return $this->validated();
+        return $this->getValidatorInstance()->validate();
     }
 }
