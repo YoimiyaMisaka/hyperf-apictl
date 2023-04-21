@@ -140,8 +140,16 @@ namespace $domainNamespace;
 {{INCLUDE_REQ_CLASS}}
 {{INCLUDE_RESP_CLASS}}
 
+/**
+ * 领域服务 -  {{HANDLE_CLASS_DOC}}
+ */
 class {{HANDLE_CLASS}}
 {
+    /**
+     * {{HANDLE_DOC}} 
+     * @param Request \$req
+     * @return Response
+     */
     public function handle(Request \$req): Response
     {
         \$resp = new Response();

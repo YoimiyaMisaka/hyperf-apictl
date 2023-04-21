@@ -65,7 +65,7 @@ class ServiceInterfaceParser
 
             $this->methods[$handle] = "
     /**
-     * $doc
+     * 应用服务接口 - {$doc}
      * @param  {$req} \$req
      * @return {$resp}
      */

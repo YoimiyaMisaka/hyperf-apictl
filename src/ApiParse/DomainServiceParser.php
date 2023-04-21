@@ -19,6 +19,8 @@ class DomainServiceParser
 
     private array $imports;
 
+    private string $doc;
+
 
     public function __construct(protected ApiCtlConfig $config)
     {
@@ -46,6 +48,9 @@ class DomainServiceParser
         foreach($arr[0] as $item) {
             preg_match('/[g|p][e|o][t|s]t?.+/', $item, $route);
             $routeItem = explode(" ", $route[0]);
+
+            preg_match('/@doc "(.+)"/', $item, $docs);
+            $this->doc = end($docs);
 
             $req  = trim(str_replace(['(', ')', "\n"], ['', '', ''], $routeItem[2]));
             $domain = substr($req, 0, strlen($req) - 3);
@@ -91,5 +96,13 @@ class DomainServiceParser
     public function getImports(): array
     {
         return $this->imports;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDoc(): string
+    {
+        return $this->doc;
     }
 }

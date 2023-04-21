@@ -52,6 +52,9 @@ class ServiceParser
             preg_match('/[g|p][e|o][t|s]t?.+/', $item, $route);
             preg_match('/@handler (.+)/', $item, $handles);
 
+            preg_match('/@doc "(.+)"/', $item, $docs);
+            $doc = end($docs);
+
             $routeItem = explode(" ", $route[0]);
             $handle = end($handles);
             $handle = trim($handle);
@@ -65,6 +68,11 @@ class ServiceParser
             $this->imports[$handle][$domain] = "{$domain}DomainService";
 
             $this->methods[$handle] = "
+    /**
+     * 应用服务接口实现 - {$doc}
+     * @param  {$req} \$req
+     * @return {$resp}
+     */
     public function {$handle}($req \$req): $resp
     {
         return (new {$domain}DomainService())->handle(\$req);

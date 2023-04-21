@@ -111,7 +111,7 @@ class ReqParser
                 $this->props[$req][$propName] = "
     /**
      * $desc
-     * @var $typeName
+     * @var $type
      */
     $rule
     $reqMapper
@@ -123,6 +123,7 @@ class ReqParser
                 $this->getterItems[$req][$propName] = "
                 
     /**
+     * 判断请求参数 {$json} 是否存在
      * @return bool
      */
     public function $existsMethod(): bool
@@ -131,7 +132,7 @@ class ReqParser
     }
                 
     /**
-     * @param $typeName \$$propName
+     * @param $type \$$propName
      * @return static
      */
     public function $setterMethod($type \$$propName): static
@@ -141,8 +142,8 @@ class ReqParser
     }
                  
     /**
-     * @param ?$typeName \$default
-     * @return ?$typeName
+     * @param ?$type \$default
+     * @return ?$type
      */
     public function $getterMethod($paramDefault): ?$type
     {
