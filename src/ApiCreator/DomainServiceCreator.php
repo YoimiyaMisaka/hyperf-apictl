@@ -43,11 +43,15 @@ class DomainServiceCreator
             $data = str_replace([
                 '{{INCLUDE_REQ_CLASS}}',
                 '{{INCLUDE_RESP_CLASS}}',
+                '{{HANDLE_CLASS_DOC}}',
                 '{{HANDLE_CLASS}}',
+                '{{HANDLE_DOC}}',
             ], [
                 join("\n", $useImport),
                 '',
-                $className
+                $className,
+                $className,
+                sprintf("领域服务处理方法 - %s", $this->parser->getDoc(),)
             ], $this->template);
             file_exists($filename) || file_put_contents($filename, $data);
             echo "create $filename successfully.\n";

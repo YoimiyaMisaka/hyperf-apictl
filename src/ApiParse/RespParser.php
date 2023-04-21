@@ -87,6 +87,7 @@ class RespParser
                 $paramsDoc = $this->parseParamDoc($docText[1]);
 
                 $json = $paramsDoc['json'];
+                $desc = $paramsDoc["desc"] ?? "";
                 $varName = $paramItems[1];
                 $typeName = '';
                 if (str_contains($varName, "[]")) {
@@ -113,6 +114,7 @@ class RespParser
 
                 $this->props[$resp][$propName] = "
     /**
+     * $desc
      * @var $varName
      */
     #[RespMapper(json: \"$json\"$typeText)]

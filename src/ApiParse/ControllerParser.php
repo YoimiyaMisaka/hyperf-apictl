@@ -53,6 +53,9 @@ class ControllerParser
 
             preg_match('/@handler (.+)/', $item, $handles);
 
+            preg_match('/@doc "(.+)"/', $item, $docs);
+            $doc = end($docs);
+
             $handle = end($handles);
             $handle = trim($handle);
 
@@ -61,6 +64,12 @@ class ControllerParser
 
             $handler = trim($routeItem[1], '/');
             $this->methods[$handle] = "
+    /**
+     * 接口(控制器) - {$doc}
+     * @param  {$req} \$req
+     * @param  ResponseInterface \$resp
+     * @return Psr7ResponseInterface
+     */
     #[RequestMapping(path: \"{$handler}\", methods: \"{$routeItem[0]}\")]
     public function {$handle}($req \$req, ResponseInterface \$resp): Psr7ResponseInterface
     {
